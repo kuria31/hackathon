@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import './App.css'
 import Signup from './signup/Signup'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Login from './signup/login';
+import Login from './signup/Login';
 import Homepage from './pages/Homepage';
+import ResetPassword from './signup/ResetPassword';
 
 function App() {
   const route = createBrowserRouter([
@@ -18,6 +18,10 @@ function App() {
     {
       path: "/homepage",
       element: <Homepage />
+    },
+    {
+      path: "/resetPassword",
+      element: <ResetPassword />
     }
   ]);
   return (

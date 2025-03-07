@@ -15,22 +15,39 @@ public class UserService {
      @Autowired
      private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-     public User addUser(User user){
-
+     public User addUser(User user) {
           user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
           return userRepository.save(user);
      }
 
-     public boolean loginUser(String email, String password) {
+     public String loginUser(String email, String password) {
           User user = userRepository.findUserByEmail(email);
           if (user == null) {
-               return false;
+               return "Email not found";
           }
-          return bCryptPasswordEncoder.matches(password, user.getPassword());
+          boolean validated = bCryptPasswordEncoder.matches(password, user.getPassword());
+          if (!validated) {
+               return "Password incorrect";
+          }
+          return "Login successful";
      }
 
-     public boolean userExists(User user) {
+     public String userExists(User user) {
           User existingUser = userRepository.findUserByEmail(user.getEmail());
-          return existingUser != null;
+          if(existingUser != null){
+               return "Email already exists";
+          }
+          return "Email does not exist";
+     }
+
+     public String resetPassword(String email, String password) {
+          User existingUser = userRepository.findUserByEmail(email);
+          if (existingUser == null) {
+               return "Email not found";
+          }
+          existingUser.setPassword(bCryptPasswordEncoder.encode(password));
+          userRepository.save(existingUser);
+          return "Password reset successful";
+
      }
 }
